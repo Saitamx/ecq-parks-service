@@ -8,6 +8,9 @@ export class ParkEntity {
   @Column()
   name: string;
 
+  @Column({ default: '' })
+  description: string;
+
   @Column('json')
   location: {
     address: string;

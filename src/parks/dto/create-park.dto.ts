@@ -91,6 +91,10 @@ export class CreateParkDto {
   name: string;
 
   @IsNotEmpty()
+  @IsString()
+  description: string;
+
+  @IsNotEmpty()
   @ValidateNested()
   @Type(() => Location)
   location: Location;

@@ -8,6 +8,9 @@ export class Park {
   name: string;
 
   @ApiProperty()
+  description: string;
+
+  @ApiProperty()
   location: {
     address: string;
     latitude: number;

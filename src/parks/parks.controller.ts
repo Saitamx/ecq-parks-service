@@ -17,6 +17,7 @@ import logger from '../logger';
 import { Param } from '@nestjs/common';
 import { Put, ParseIntPipe } from '@nestjs/common';
 import { UpdateParkDto } from './dto/update-park.dto';
+import { ParkListDto } from './dto/park-list.dto';
 
 @ApiTags('parks')
 @Controller('parks')
@@ -34,6 +35,19 @@ export class ParksController {
     return await this.parksService.getParks();
   }
 
+  @Get('/list')
+  @ApiOperation({
+    summary: 'Retrieve a list of parks with id, images, name, and description',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of parks with limited information',
+    type: [ParkListDto],
+  })
+  async findList(): Promise<ParkListDto[]> {
+    return await this.parksService.getParksList();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a specific park by ID' })
   @ApiResponse({
@@ -47,6 +61,9 @@ export class ParksController {
   })
   async findOne(@Param('id') id: string): Promise<Park> {
     const parkId = parseInt(id, 10);
+    if (isNaN(parkId)) {
+      throw new BadRequestException(`Invalid ID: ${id}`);
+    }
     const park = await this.parksService.getParkById(parkId);
     if (!park) {
       throw new NotFoundException(`Park with ID ${parkId} not found.`);

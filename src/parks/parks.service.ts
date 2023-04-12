@@ -5,6 +5,7 @@ import { EntityNotFoundError, Repository } from 'typeorm';
 import { ParkEntity } from './entity/park.entity';
 import { Park } from './interfaces/park.interface';
 import { UpdateParkDto } from './dto/update-park.dto';
+import { ParkListDto } from './dto/park-list.dto';
 
 @Injectable()
 export class ParksService {
@@ -26,6 +27,12 @@ export class ParksService {
       }
       throw error;
     }
+  }
+
+  async getParksList(): Promise<ParkListDto[]> {
+    return this.parkRepository.find({
+      select: ['id', 'name', 'description', 'images'],
+    });
   }
 
   async create(park: CreateParkDto): Promise<ParkEntity> {

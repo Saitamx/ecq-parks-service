@@ -92,6 +92,10 @@ export class UpdateParkDto {
   @IsOptional()
   name?: string;
 
+  @IsString()
+  @IsOptional()
+  description?: string;
+
   @ValidateNested()
   @IsOptional()
   @Type(() => Location)
