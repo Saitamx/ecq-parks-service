@@ -8,6 +8,9 @@ export class ParkEntity {
   @Column()
   name: string;
 
+  @Column()
+  ranking: number;
+
   @Column({ default: '' })
   description: string;
 

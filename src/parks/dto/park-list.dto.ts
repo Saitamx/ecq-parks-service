@@ -8,6 +8,9 @@ export class ParkListDto {
   name: string;
 
   @ApiProperty()
+  ranking: number;
+
+  @ApiProperty()
   description: string;
 
   @ApiProperty()

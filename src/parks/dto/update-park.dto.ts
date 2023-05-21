@@ -82,6 +82,10 @@ class NearbyService {
   @IsOptional()
   name?: string;
 
+  @IsString()
+  @IsOptional()
+  ranking?: number;
+
   @IsNumber()
   @IsOptional()
   distance?: number;

@@ -31,7 +31,7 @@ export class ParksService {
 
   async getParksList(): Promise<ParkListDto[]> {
     return this.parkRepository.find({
-      select: ['id', 'name', 'description', 'images'],
+      select: ['id', 'name', 'ranking', 'description', 'images'],
     });
   }
 
