@@ -1,14 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
-
-const server = express();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
-  const port = process.env.PORT || 3000;
+  const app = await NestFactory.create(AppModule);
+  const port = process.env.PORT || 3001;
 
   const config = new DocumentBuilder()
     .setTitle('Parks API')
@@ -18,9 +14,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.init();
+  await app.listen(port);
 }
-
 bootstrap();
-
-export = server;

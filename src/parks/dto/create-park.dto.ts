@@ -91,6 +91,10 @@ export class CreateParkDto {
   name: string;
 
   @IsNotEmpty()
+  @IsNumber()
+  ranking: number;
+
+  @IsNotEmpty()
   @IsString()
   description: string;
 

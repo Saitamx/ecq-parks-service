@@ -96,6 +96,10 @@ export class UpdateParkDto {
   @IsOptional()
   name?: string;
 
+  @IsNumber()
+  @IsOptional()
+  ranking?: number;
+
   @IsString()
   @IsOptional()
   description?: string;
