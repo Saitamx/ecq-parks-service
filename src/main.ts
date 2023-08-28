@@ -4,7 +4,13 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = process.env.PORT || 3001;
+  app.enableCors({
+    origin: 'http://localhost:3011',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Accept',
+    credentials: true,
+  });
+  const port = process.env.PORT || 3011;
 
   const config = new DocumentBuilder()
     .setTitle('Parks API')

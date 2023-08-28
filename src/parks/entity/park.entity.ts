@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Municipality } from '../../municipalities/entity/municipality.entity';
 
 @Entity()
 export class ParkEntity {
@@ -46,4 +47,7 @@ export class ParkEntity {
     name: string;
     distance: number;
   }[];
+
+  @ManyToOne(() => Municipality, (municipality) => municipality.parks)
+  municipality: Municipality;
 }
