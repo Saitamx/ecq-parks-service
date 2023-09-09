@@ -13,7 +13,7 @@ import { ParkEntity } from './parks/entity/park.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.DATABASE_URL, // Aquí va tu URL de conexión de ElephantSQL
+      url: process.env.DATABASE_URL,
       entities: [ParkEntity],
       synchronize: true,
       ssl:
