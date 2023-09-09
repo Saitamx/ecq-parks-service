@@ -1,121 +1,61 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-  IsBoolean,
-  IsArray,
-  ValidateNested,
-} from 'class-validator';
+import { NearbyServices } from '../interfaces/nearby-services.interface';
+import { Features } from '../interfaces/features.interface';
+import { Location } from '../interfaces/location.interface';
+import { Images } from '../interfaces/images.interface';
+
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-
-class Location {
-  @IsNotEmpty()
-  @IsString()
-  address: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  latitude: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  longitude: number;
-}
-
-class Security {
-  @IsNotEmpty()
-  @IsBoolean()
-  cameras: boolean;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  security_personnel: boolean;
-}
-
-class Features {
-  @IsNotEmpty()
-  @IsBoolean()
-  pet_friendly: boolean;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  bike_parking: boolean;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  car_parking: boolean;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  trash_bins: boolean;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  water_fountain: boolean;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  shade: boolean;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  rest_areas: boolean;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  lighting: boolean;
-
-  @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => Security)
-  security: Security;
-}
-
-class NearbyService {
-  @IsNotEmpty()
-  @IsString()
-  type: string;
-
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  distance: number;
-}
+import {
+  IsNumber,
+  IsString,
+  IsArray,
+  IsObject,
+  ValidateNested,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateParkDto {
-  @IsNotEmpty()
+  @ApiProperty({ description: 'Park name' })
   @IsString()
   name: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  ranking: number;
-
-  @IsNotEmpty()
+  @ApiProperty({ description: 'Park Commune' })
   @IsString()
-  description: string;
+  commune: string;
 
-  @IsNotEmpty()
+  @ApiProperty({ description: 'Park ranking' })
+  @IsNumber()
+  @IsOptional()
+  ranking?: number;
+
+  @ApiProperty({ description: 'Park description' })
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @ApiProperty({ description: 'Park location' })
+  @IsObject()
   @ValidateNested()
   @Type(() => Location)
   location: Location;
 
-  @IsNotEmpty()
+  @ApiProperty({ description: 'Park features' })
+  @IsObject()
   @ValidateNested()
   @Type(() => Features)
   features: Features;
 
-  @IsNotEmpty()
-  @IsArray()
-  @IsString({ each: true })
-  images: string[];
-
-  @IsNotEmpty()
+  @ApiProperty({ description: 'Images of the park' })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => NearbyService)
-  nearby_services: NearbyService[];
+  @Type(() => Images)
+  @IsOptional()
+  images?: Images[];
+
+  @ApiProperty({ description: 'Nearby services to the park' })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => NearbyServices)
+  @IsOptional()
+  nearby_services?: NearbyServices[];
 }

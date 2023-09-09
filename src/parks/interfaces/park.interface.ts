@@ -1,48 +1,60 @@
+import { NearbyServices } from './nearby-services.interface';
+import { Features } from './features.interface';
+import { Location } from './location.interface';
+import { Images } from './images.interface';
+
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import {
+  IsNumber,
+  IsString,
+  IsArray,
+  IsObject,
+  ValidateNested,
+} from 'class-validator';
 
 export class Park {
-  @ApiProperty()
+  @ApiProperty({ description: 'Park ID' })
+  @IsNumber()
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Park name' })
+  @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Park Commune' })
+  @IsString()
+  commune: string;
+
+  @ApiProperty({ description: 'Park ranking' })
+  @IsNumber()
   ranking: number;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Park description' })
+  @IsString()
   description: string;
 
-  @ApiProperty()
-  location: {
-    address: string;
-    latitude: number;
-    longitude: number;
-  };
+  @ApiProperty({ description: 'Park location' })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Location)
+  location: Location;
 
-  @ApiProperty()
-  features: {
-    pet_friendly: boolean;
-    bike_parking: boolean;
-    car_parking: boolean;
-    trash_bins: boolean;
-    water_fountain: boolean;
-    shade: boolean;
-    rest_areas: boolean;
-    lighting: boolean;
-    security: {
-      cameras: boolean;
-      security_personnel: boolean;
-    };
-  };
+  @ApiProperty({ description: 'Park features' })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Features)
+  features: Features;
 
-  @ApiProperty()
-  images: string[];
+  @ApiProperty({ description: 'Images of the park' })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Images)
+  images: Images[];
 
-  @ApiProperty()
-  nearby_services: {
-    type: string;
-    name: string;
-    distance: number;
-  }[];
+  @ApiProperty({ description: 'Nearby services to the park' })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => NearbyServices)
+  nearby_services: NearbyServices[];
 }

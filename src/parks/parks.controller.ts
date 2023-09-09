@@ -8,6 +8,7 @@ import {
   BadRequestException,
   NotFoundException,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ParksService } from './parks.service';
 import { Park } from './interfaces/park.interface';
@@ -18,6 +19,7 @@ import { Param } from '@nestjs/common';
 import { Put, ParseIntPipe } from '@nestjs/common';
 import { UpdateParkDto } from './dto/update-park.dto';
 import { ParkListDto } from './dto/park-list.dto';
+import { FilterParksDto } from './dto/filter-park.dto';
 
 @ApiTags('parks')
 @Controller('parks')
@@ -31,21 +33,21 @@ export class ParksController {
     description: 'List of parks',
     type: [Park],
   })
-  async findAll(): Promise<Park[]> {
-    return await this.parksService.getParks();
+  async findAll(@Query() filterDto: FilterParksDto): Promise<Park[]> {
+    return await this.parksService.getParks(filterDto);
   }
 
   @Get('/list')
   @ApiOperation({
-    summary: 'Retrieve a list of parks with id, images, name, and description',
+    summary: 'Retrieve a list of parks with limited details',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'List of parks with limited information',
     type: [ParkListDto],
   })
-  async findList(): Promise<ParkListDto[]> {
-    return await this.parksService.getParksList();
+  async findList(@Query() filterDto: FilterParksDto): Promise<ParkListDto[]> {
+    return await this.parksService.getParksList(filterDto);
   }
 
   @Get(':id')

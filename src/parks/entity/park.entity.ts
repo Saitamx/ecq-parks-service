@@ -1,4 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Location } from '../interfaces/location.interface';
+import { Features } from '../interfaces/features.interface';
+import { Images } from '../interfaces/images.interface';
+import { NearbyServices } from '../interfaces/nearby-services.interface';
 
 @Entity()
 export class ParkEntity {
@@ -8,6 +12,9 @@ export class ParkEntity {
   @Column()
   name: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  commune: string;
+
   @Column({ default: 100 })
   ranking: number;
 
@@ -15,35 +22,14 @@ export class ParkEntity {
   description: string;
 
   @Column('json')
-  location: {
-    address: string;
-    latitude: number;
-    longitude: number;
-  };
+  location: Location;
 
   @Column('json')
-  features: {
-    pet_friendly: boolean;
-    bike_parking: boolean;
-    car_parking: boolean;
-    trash_bins: boolean;
-    water_fountain: boolean;
-    shade: boolean;
-    rest_areas: boolean;
-    lighting: boolean;
-    security: {
-      cameras: boolean;
-      security_personnel: boolean;
-    };
-  };
+  features: Features;
 
   @Column('simple-array')
-  images: string[];
+  images: Images[];
 
   @Column('json')
-  nearby_services: {
-    type: string;
-    name: string;
-    distance: number;
-  }[];
+  nearby_services: NearbyServices[];
 }

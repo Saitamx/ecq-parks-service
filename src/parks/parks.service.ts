@@ -6,6 +6,7 @@ import { ParkEntity } from './entity/park.entity';
 import { Park } from './interfaces/park.interface';
 import { UpdateParkDto } from './dto/update-park.dto';
 import { ParkListDto } from './dto/park-list.dto';
+import { FilterParksDto } from './dto/filter-park.dto';
 
 @Injectable()
 export class ParksService {
@@ -14,8 +15,34 @@ export class ParksService {
     private readonly parkRepository: Repository<ParkEntity>,
   ) {}
 
-  async getParks(): Promise<ParkEntity[]> {
-    return this.parkRepository.find();
+  async getParks(filterDto: FilterParksDto): Promise<ParkEntity[]> {
+    const { commune } = filterDto;
+    let query = this.parkRepository.createQueryBuilder('park');
+
+    if (commune) {
+      query = query.where('park.commune = :commune', { commune });
+    }
+
+    return await query.getMany();
+  }
+
+  async getParksList(filterDto: FilterParksDto): Promise<ParkListDto[]> {
+    const { commune } = filterDto;
+    let query = this.parkRepository
+      .createQueryBuilder('park')
+      .select([
+        'park.id',
+        'park.name',
+        'park.ranking',
+        'park.description',
+        'park.images',
+      ]);
+
+    if (commune) {
+      query = query.where('park.commune = :commune', { commune });
+    }
+
+    return await query.getMany();
   }
 
   async getParkById(id: number): Promise<Park> {
@@ -27,12 +54,6 @@ export class ParksService {
       }
       throw error;
     }
-  }
-
-  async getParksList(): Promise<ParkListDto[]> {
-    return this.parkRepository.find({
-      select: ['id', 'name', 'ranking', 'description', 'images'],
-    });
   }
 
   async create(park: CreateParkDto): Promise<ParkEntity> {
