@@ -1,0 +1,8 @@
+base_directory = "src"
+build_command = "npm run build"
+publish_directory = "dist"
+functions_directory = "functions"
+environment_variables = {
+    DATABASE_URL="postgres://hdizvvit:FeCftVrg_b6RJQf9tf088EzZi4DZPuVa@silly.db.elephantsql.com/hdizvvit"
+    NODE_ENV="production"
+}
