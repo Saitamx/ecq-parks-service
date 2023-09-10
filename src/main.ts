@@ -1,5 +1,8 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
+import { existsSync } from 'fs';
+
+const envFile = existsSync('.env.local') ? '.env.local' : '.env';
+dotenv.config({ path: envFile });
 
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -23,7 +26,11 @@ const createNestServer = async (expressInstance) => {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.init();
+  const PORT = process.env.PORT || 3010;
+
+  await app.listen(PORT, () => {
+    console.log(`Servidor NestJS en funcionamiento en el puerto ${PORT}`);
+  });
 };
 
 createNestServer(server);
