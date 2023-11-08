@@ -20,6 +20,7 @@ import { Put, ParseIntPipe } from '@nestjs/common';
 import { UpdateParkDto } from './dto/update-park.dto';
 import { ParkListDto } from './dto/park-list.dto';
 import { FilterParksDto } from './dto/filter-park.dto';
+import { CreateParksDto } from './dto/create-parks.dto';
 
 @ApiTags('parks')
 @Controller('parks')
@@ -93,6 +94,34 @@ export class ParksController {
       return newPark;
     } catch (error) {
       logger.error(`Error creating park: ${error.message}`);
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Post('/multiple')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Create multiple parks' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'The parks have been successfully created.',
+    type: [Park],
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid input data.',
+  })
+  @ApiBody({ type: [CreateParkDto], description: 'Data for multiple parks' })
+  async createMultiple(
+    @Body() createParksDto: CreateParksDto,
+  ): Promise<Park[]> {
+    try {
+      const newParks = await this.parksService.createMultiple(createParksDto);
+      newParks.forEach((park) =>
+        logger.info(`Park created with ID ${park.id}`),
+      );
+      return newParks;
+    } catch (error) {
+      logger.error(`Error creating parks: ${error.message}`);
       throw new BadRequestException(error.message);
     }
   }

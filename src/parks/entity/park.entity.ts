@@ -27,7 +27,7 @@ export class ParkEntity {
   @Column('json')
   features: Features;
 
-  @Column('simple-array')
+  @Column('json')
   images: Images[];
 
   @Column('json')

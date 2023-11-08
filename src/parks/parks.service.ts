@@ -7,6 +7,7 @@ import { Park } from './interfaces/park.interface';
 import { UpdateParkDto } from './dto/update-park.dto';
 import { ParkListDto } from './dto/park-list.dto';
 import { FilterParksDto } from './dto/filter-park.dto';
+import { CreateParksDto } from './dto/create-parks.dto';
 
 @Injectable()
 export class ParksService {
@@ -59,6 +60,11 @@ export class ParksService {
   async create(park: CreateParkDto): Promise<ParkEntity> {
     const newPark = this.parkRepository.create(park);
     return this.parkRepository.save(newPark);
+  }
+
+  async createMultiple(createParksDto: CreateParksDto): Promise<ParkEntity[]> {
+    const newParks = this.parkRepository.create(createParksDto.parks);
+    return await this.parkRepository.save(newParks);
   }
 
   async update(id: number, updateParkDto: UpdateParkDto): Promise<ParkEntity> {
